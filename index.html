@@ -8,7 +8,7 @@
 	  display: inline-block;
 	  width: 30px;
 	  height: 30px;
-	  border: 2px solid black;
+	  //border: 2px solid black;
 	}
 
 	.prost {
@@ -37,6 +37,7 @@
 	      maxI: 0,
 	      maxJ: 0,
 	      start: 1,
+	      seeFract: 1,
 	      prost: [2,	3,	5,	7,	11,	13,	17,	19,	23,	29,	31,	37,
 	41,	43,	47,	53,	59,	61,	67,	71,	73,	79,	83,	89,
 	97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199,211, 223
@@ -79,8 +80,9 @@
 	    let initial = [];
 	    let maxIndexJ = this.state.maxJ;
 	    for(let i = 0; i < maxIndexI; i++) {
-	        for(let j = 0; j < maxIndexJ; j++) {
-	        	initial.push(<Welcome class={(this.state.prost.indexOf(parseInt(maxIndexJ) * parseInt(i) + parseInt(j) + parseInt(this.state.start)) != -1) ? "prost" : "no-prost"} key={"key-" + (maxIndexJ * i + j + this.state.start)} number={parseInt(maxIndexJ) * parseInt(i) + parseInt(j) + parseInt(this.state.start)}/>)
+	         for(let j = 0; j < maxIndexJ; j++) {
+	        	let vspom = parseInt(maxIndexJ) * parseInt(i) + parseInt(j) + parseInt(this.state.start);
+	        	initial.push(<Welcome class={(this.state.prost.indexOf(vspom) != -1) ? "prost" : "no-prost"} key={"key-" + (maxIndexJ * i + j + this.state.start)} number={(this.state.seeFract == 1) ? vspom  : ""}/>)
 	      	}
 	        initial.push(<Br  key={"k-" + i}/>)
 	     }
@@ -93,7 +95,8 @@
 	    let maxIndexJ = event.target.value;
 	    for(let i = 0; i < maxIndexI; i++) {
 	        for(let j = 0; j < maxIndexJ; j++) {
-	        	initial.push(<Welcome class={(this.state.prost.indexOf(parseInt(maxIndexJ) * parseInt(i) + parseInt(j) + parseInt(this.state.start)) != -1) ? "prost" : "no-prost"} key={"key-" + (maxIndexJ * i + j + this.state.start)} number={parseInt(maxIndexJ) * parseInt(i) + parseInt(j) + parseInt(this.state.start)}/>)
+	        	let vspom = parseInt(maxIndexJ) * parseInt(i) + parseInt(j) + parseInt(this.state.start);
+	        	initial.push(<Welcome class={(this.state.prost.indexOf(vspom) != -1) ? "prost" : "no-prost"} key={"key-" + (maxIndexJ * i + j + this.state.start)} number={(this.state.seeFract == 1) ? vspom : ""}/>)
 	      	}
 	        initial.push(<Br  key={"k-" + i}/>)
 	    }
@@ -105,21 +108,37 @@
 	    let maxIndexI = this.state.maxI;
 	    let maxIndexJ = this.state.maxJ;
 	    for(let i = 0; i < maxIndexI; i++) {
-	        for(let j = 0; j < maxIndexJ; j++) {
-	        	initial.push(<Welcome class={(this.state.prost.indexOf(parseInt(maxIndexJ) * parseInt(i) + parseInt(j) + parseInt(this.state.start)) != -1) ? "prost" : "no-prost"} key={"key-" + (maxIndexJ * i + j + this.state.start)} number={parseInt(maxIndexJ) * parseInt(i) + parseInt(j) + parseInt(this.state.start)}/>)
+	         for(let j = 0; j < maxIndexJ; j++) {
+	        	let vspom = parseInt(maxIndexJ) * parseInt(i) + parseInt(j) + parseInt(this.state.start);
+	        	initial.push(<Welcome class={(this.state.prost.indexOf(vspom) != -1) ? "prost" : "no-prost"} key={"key-" + (maxIndexJ * i + j + this.state.start)} number={(this.state.seeFract == 1) ? vspom : ""}/>)
 	      	}
 	        initial.push(<Br  key={"k-" + i}/>)
 	    }
 	    this.setState({a: initial, start: event.target.value});
+	  }
+
+	  onCheckbox = () => {
+	  	let initial = [];
+	    let maxIndexI = this.state.maxI;
+	    let maxIndexJ = this.state.maxJ;
+	    for(let i = 0; i < maxIndexI; i++) {
+	         for(let j = 0; j < maxIndexJ; j++) {
+	        	let vspom = parseInt(maxIndexJ) * parseInt(i) + parseInt(j) + parseInt(this.state.start);
+	        	initial.push(<Welcome class={(this.state.prost.indexOf(vspom) != -1) ? "prost" : "no-prost"} key={"key-" + (maxIndexJ * i + j + this.state.start)} number={(!this.state.seeFract == 1) ? vspom : ""}/>)
+	      	}
+	        initial.push(<Br  key={"k-" + i}/>)
+	    }
+	    this.setState({seeFract: !this.state.seeFract, a: initial});
 	  }
 	  
 	  
 	  render() {
 	    return <div>
 	    {this.state.a}
-	    <input min="1" id="changeX" type="number" onChange={this.onChangeX}/>
-	    <input min="1" id="changeY" type="number" onChange={this.onChangeY}/>
-	    <input min="1" id="changeStart" type="number" onChange={this.onChangeStart}/>
+	    Количество строк<input min="1" id="changeX" type="number" onChange={this.onChangeX}/>
+	    Количество столбцов <input min="1" id="changeY" type="number" onChange={this.onChangeY}/>
+	    Смещение<input min="1" id="changeStart" type="number" onChange={this.onChangeStart}/>
+	    Искать фрактал<input type="checkbox" onClick={this.onCheckbox}/>
 	      </div>;
 	  }
 	}
